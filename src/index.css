@@ -7,7 +7,42 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* border を含めた幅で要素の幅が計算されるように */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+.App {
+  max-width: calc(9px * 35 + 1px * 2); /* (マスの幅) * 個数 + (ボーダーの幅) * 本数 */
+  text-align: center;
+}
+
+/* 要素が真ん中によるようフレックスボックスを設定 */
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.dots {
+  height: 9px;
+  width: 9px;
+  /* border: 1px solid #0f1d1d; */
+  background: #0f1d1d;
+}
+
+.field {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.snake {
+  background: white;
+}
+
+.food {
+  background: pink;
 }
