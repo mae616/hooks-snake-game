@@ -1,10 +1,27 @@
-export const initFields = (fieldSize, initialPosition) => {
+const getFoodPosition = (fieldSize, excludes) => {
+    while (true) {
+        const x = Math.floor(Math.random() * (fieldSize - 1 - 1)) + 1;
+        const y = Math.floor(Math.random() * (fieldSize - 1 - 1)) + 1;
+        // 蛇の体の座標 配列と一致するとこには餌を置かない
+        const conflict = excludes.some(item => item.x === x && item.y === y);
+
+        if (!conflict) {
+            return { x, y };
+        }
+    }
+}
+
+
+export const initFields = (fieldSize, snake) => {
     const fields = [];
     for (let i = 0; i < fieldSize; i++) {
         const cols = new Array(fieldSize).fill('');
         fields.push(cols);
     }
-    fields[initialPosition.x][initialPosition.y] = 'snake'
+    fields[snake.x][snake.y] = 'snake'
+
+    const food = getFoodPosition(fieldSize, [snake]);
+    fields[food.y][food.x] = 'food';
 
     return fields;
 }
