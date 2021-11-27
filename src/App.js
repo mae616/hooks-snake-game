@@ -72,10 +72,19 @@ const isCollision = (fieldSize, position) => {
   return false;
 }
 
+// 自分(蛇)を食べてしまう場合 true:食べてしまう
+const isEatingMyself = (fields, position) => {
+  return fields[position.y][position.x] === 'snake';
+}
+
 
 function App() {
   const [fields, setFields] = useState(initialValues);
   const [body, setBody] = useState([initialPosition]);
+  // // 自分を食べるテスト
+  // const [body, setBody] = useState(
+  //   new Array(15).fill('').map((_item, index) => ({ x: 17, y: 17 + index }))
+  // );
   const [status, setStatus] = useState(GameStatus.init);
   const [tick, setTick] = useState(0);
   const [direction, setDirection] = useState(Direction.up);
@@ -153,8 +162,9 @@ function App() {
       y: y + delta.y
     };
 
-    // 衝突判定
-    if (isCollision(fields.length, newPosition)) {
+    // 衝突判定と、自分(蛇)を食べる判定
+    if (isCollision(fields.length, newPosition)
+      || isEatingMyself(fields, newPosition)) {
       return false;
     }
 
