@@ -3,7 +3,7 @@ import Navigation from './components/Navigation';
 import Field from './components/Field';
 import Button from './components/Button';
 import ManipulationPanel from './components/ManipulationPanel';
-import { initFields } from './utils'
+import { initFields, getFoodPosition } from './utils'
 
 const initialPosition = { x: 17, y: 17 };
 const initialValues = initFields(35, initialPosition);
@@ -75,7 +75,7 @@ const isCollision = (fieldSize, position) => {
 
 function App() {
   const [fields, setFields] = useState(initialValues);
-  const [position, setPosition] = useState(initialPosition);
+  const [body, setBody] = useState([initialPosition]);
   const [status, setStatus] = useState(GameStatus.init);
   const [tick, setTick] = useState(0);
   const [direction, setDirection] = useState(Direction.up);
@@ -95,7 +95,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // if (!position || status !== GameStatus.playing) {
+    // if (!body.length === 0 || status !== GameStatus.playing) {
     if (status !== GameStatus.playing) {
       return;
     }
@@ -115,7 +115,7 @@ function App() {
     }, defaultInterval);
     setDirection(Direction.up);
     setStatus(GameStatus.init);
-    setPosition(initialPosition);
+    setBody([initialPosition]);
     setFields(initFields(35, initialPosition));
   }
 
@@ -146,7 +146,7 @@ function App() {
 
   // 蛇を動かし、描画する
   const handleMoving = () => {
-    const { x, y } = position;
+    const { x, y } = body[0];
     const delta = Delta[direction];
     const newPosition = {
       x: x + delta.x,
@@ -160,11 +160,23 @@ function App() {
 
     // フィールド配列の再設定
     const nextFields = fields.map(field => [...field]);
-    nextFields[y][x] = '';
+
+    const newBody = [...body];
+
+    if (fields[newPosition.y][newPosition.x] !== 'food') {
+      // 移動する、次のフィールドが餌でない場合
+      const removingTrack = newBody.pop(); // 最後の要素を取り出し削除
+      nextFields[removingTrack.y][removingTrack.x] = '';
+    } else {
+      // 餌の場合
+      const food = getFoodPosition(fields.length, [...newBody, newPosition]);
+      nextFields[food.y][food.x] = 'food';
+    }
     nextFields[newPosition.y][newPosition.x] = 'snake';
+    newBody.unshift(newPosition); // 先頭に要素を追加する
 
     // stateの更新と再レンダリング
-    setPosition(newPosition);
+    setBody(newBody);
     // setFields(fields);
     setFields(nextFields);
     return true;
