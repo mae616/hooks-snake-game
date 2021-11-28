@@ -13,7 +13,7 @@ const defaultInterval = 100;
 const GameStatus = Object.freeze({
   init: 'init',
   playing: 'playing',
-  suspended: 'suspended',
+  suspended: 'suspended', // 一時停止
   gameover: 'gameover'
 });
 
@@ -118,6 +118,8 @@ function App() {
 
   const onStart = () => setStatus(GameStatus.playing);
 
+  const onStop = () => setStatus(GameStatus.suspended);
+
   const onRestart = () => {
     timer = setInterval(() => {
       setTick(tick => tick + 1)
@@ -204,7 +206,12 @@ function App() {
         <Field fields={fields} />
       </main>
       <footer className="footer">
-        <Button status={status} GameStatus={GameStatus} onStart={onStart} onRestart={onRestart} />
+        <Button
+          status={status}
+          onStop={onStop}
+          onStart={onStart}
+          onRestart={onRestart}
+        />
         <ManipulationPanel onChange={onChangeDirection} />
       </footer>
     </div>
