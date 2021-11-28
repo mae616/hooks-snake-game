@@ -8,6 +8,9 @@ import { initFields, getFoodPosition } from './utils'
 const initialPosition = { x: 17, y: 17 };
 const initialValues = initFields(35, initialPosition);
 const defaultInterval = 100;
+const defaultDifficulty = 3;
+
+const Difficulty = [1000, 500, 100, 50, 10];
 
 // ゲームの状態
 const GameStatus = Object.freeze({
@@ -86,22 +89,26 @@ function App() {
   //   new Array(15).fill('').map((_item, index) => ({ x: 17, y: 17 + index }))
   // );
   const [status, setStatus] = useState(GameStatus.init);
-  const [tick, setTick] = useState(0);
   const [direction, setDirection] = useState(Direction.up);
+  const [difficulty, setDifficulty] = useState(defaultDifficulty);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     // setPosition(initialPosition);
+
+    // ゲームの中の時間を管理する
+    const interval = Difficulty[difficulty - 1];
     timer = setInterval(() => {
       // if (!position) { // useEffectの場合の考慮
       //   return;
       // }
       // console.log(position)
       setTick(tick => tick + 1);
-    }, defaultInterval);
+    }, interval);
 
     // useEffectのリターンにするとコンポーネントが削除されるタイミングで実行される
     return unsubscribe;
-  }, []);
+  }, [difficulty]);
 
   useEffect(() => {
     // if (!body.length === 0 || status !== GameStatus.playing) {
@@ -114,7 +121,7 @@ function App() {
       unsubscribe();
       setStatus(GameStatus.gameover);
     }
-  }, [tick]);
+  }, [tick, difficulty]);
 
   const onStart = () => setStatus(GameStatus.playing);
 
@@ -142,6 +149,19 @@ function App() {
     }
     setDirection(newDirection)
   }, [direction, status]);
+
+  // 難易度の変更
+  const onChangeDifficulty = useCallback((difficulty) => {
+
+    // 初期状態（ゲームを始める前）以外では変更できない 
+    if (status !== GameStatus.init) {
+      return;
+    }
+    if (difficulty < 1 || difficulty > Difficulty.length) {
+      return;
+    }
+    setDifficulty(difficulty);
+  }, [status, difficulty]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -200,7 +220,11 @@ function App() {
         <div className="title-container">
           <h1 className="title">Snake Game</h1>
         </div>
-        <Navigation />
+        <Navigation
+          length={body.length}
+          difficulty={difficulty}
+          onChangeDifficulty={onChangeDifficulty}
+        />
       </header>
       <main className="main">
         <Field fields={fields} />
