@@ -61,6 +61,10 @@ function App() {
 
   useEffect(() => {
     // setPosition(initialPosition);
+    // ! SRで追加したところ
+    if (status === GameStatus.init) {
+      return;
+    }
 
     // ゲームの中の時間を管理する
     const interval = Difficulty[difficulty - 1];
@@ -74,7 +78,7 @@ function App() {
 
     // useEffectのリターンにするとコンポーネントが削除されるタイミングで実行される
     return unsubscribe;
-  }, [difficulty]);
+  }, [difficulty, status]);
 
   useEffect(() => {
     // if (!body.length === 0 || status !== GameStatus.playing) {
@@ -117,17 +121,17 @@ function App() {
   }, [direction, status]);
 
   // 難易度の変更
-  const onChangeDifficulty = useCallback((difficulty) => {
+  const onChangeDifficulty = useCallback((difficult) => {
 
     // 初期状態（ゲームを始める前）以外では変更できない 
     if (status !== GameStatus.init) {
       return;
     }
-    if (difficulty < 1 || difficulty > Difficulty.length) {
+    if (difficult < 1 || difficult > Difficulty.length) {
       return;
     }
-    setDifficulty(difficulty);
-  }, [status, difficulty]);
+    setDifficulty(difficult);
+  }, [status]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
