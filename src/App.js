@@ -62,20 +62,18 @@ function App() {
   useEffect(() => {
     // setPosition(initialPosition);
     // ! SRで追加したところ
-    if (status === GameStatus.init) {
-      return;
-    }
 
     // ゲームの中の時間を管理する
     const interval = Difficulty[difficulty - 1];
-    timer = setInterval(() => {
-      // if (!position) { // useEffectの場合の考慮
-      //   return;
-      // }
-      // console.log(position)
-      setTick(tick => tick + 1);
-    }, interval);
-
+    if (status === GameStatus.playing) {
+      timer = setInterval(() => {
+        // if (!position) { // useEffectの場合の考慮
+        //   return;
+        // }
+        // console.log(position)
+        setTick(tick => tick + 1);
+      }, interval);
+    }
     // useEffectのリターンにするとコンポーネントが削除されるタイミングで実行される
     return unsubscribe;
   }, [difficulty, status]);
