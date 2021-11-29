@@ -1,4 +1,4 @@
-import { GameStatus } from "../App";
+import { GameStatus } from "../constants";
 
 const Button = ({ status, onStart, onStop, onRestart }) => {
     return (

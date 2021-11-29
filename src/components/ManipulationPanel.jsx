@@ -1,4 +1,3 @@
-import { Direction } from "../App";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faArrowLeft,
@@ -6,6 +5,7 @@ import {
     faArrowDown,
     faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
+import { Direction } from "../constants";
 
 const ManipulationPanel = ({ onChange }) => {
 

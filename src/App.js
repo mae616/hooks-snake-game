@@ -3,54 +3,20 @@ import Navigation from './components/Navigation';
 import Field from './components/Field';
 import Button from './components/Button';
 import ManipulationPanel from './components/ManipulationPanel';
+import {
+  defaultInterval,
+  defaultDifficulty,
+  Delta,
+  Difficulty,
+  Direction,
+  DirectionKeyCodeMap,
+  fieldSize,
+  GameStatus,
+  OppositeDirection,
+  initialPosition,
+  initialValues
+} from './constants';
 import { initFields, getFoodPosition } from './utils'
-
-const initialPosition = { x: 17, y: 17 };
-const initialValues = initFields(35, initialPosition);
-const defaultInterval = 100;
-const defaultDifficulty = 3;
-
-const Difficulty = [1000, 500, 100, 50, 10];
-
-// ゲームの状態
-const GameStatus = Object.freeze({
-  init: 'init',
-  playing: 'playing',
-  suspended: 'suspended', // 一時停止
-  gameover: 'gameover'
-});
-
-// 蛇の進行方向
-const Direction = Object.freeze({
-  up: 'up',
-  right: 'right',
-  left: 'left',
-  down: 'down'
-});
-
-// キーコードと進行方向のマッピング
-const DirectionKeyCodeMap = Object.freeze({
-  37: Direction.left,
-  38: Direction.up,
-  39: Direction.right,
-  40: Direction.down
-});
-
-// 反対方向
-const OppositeDirection = Object.freeze({
-  up: Direction.down,
-  right: Direction.left,
-  left: Direction.right,
-  down: Direction.up
-});
-
-// 移動方向における座標の変化量
-const Delta = Object.freeze({
-  up: { x: 0, y: -1 },
-  right: { x: 1, y: 0 },
-  left: { x: -1, y: 0 },
-  down: { x: 0, y: 1 }
-});
 
 // let timer = undefined;
 let timer = null;
@@ -134,7 +100,7 @@ function App() {
     setDirection(Direction.up);
     setStatus(GameStatus.init);
     setBody([initialPosition]);
-    setFields(initFields(35, initialPosition));
+    setFields(initFields(fieldSize, initialPosition));
   }
 
   // 進行方向の変更
@@ -243,7 +209,3 @@ function App() {
 }
 
 export default App;
-export {
-  GameStatus,
-  Direction
-};
