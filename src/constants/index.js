@@ -1,6 +1,6 @@
 import { initFields } from '../utils'
 
-export const fieldSize = 35;
+const fieldSize = 35;
 export const initialPosition = { x: 17, y: 17 };
 export const initialValues = initFields(fieldSize, initialPosition);
 export const defaultInterval = 100;
