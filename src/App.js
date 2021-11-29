@@ -121,7 +121,7 @@ function App() {
       unsubscribe();
       setStatus(GameStatus.gameover);
     }
-  }, [tick, difficulty]);
+  }, [tick]);
 
   const onStart = () => setStatus(GameStatus.playing);
 
